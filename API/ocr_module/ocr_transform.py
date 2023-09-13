@@ -4,7 +4,9 @@ import pandas as pd
 import keras_ocr
 import math
 from PIL import Image, ImageFont, ImageDraw
+from pathlib import Path
 from difflib import SequenceMatcher
+import pdb
 
 pipeline = keras_ocr.pipeline.Pipeline()
 
@@ -16,6 +18,9 @@ pipeline = keras_ocr.pipeline.Pipeline()
 """Take in an image, locate text, make df of text locations,
     make new image without the text"""
 def process_image_and_inpaint(image, pipeline):
+    # Resize image to the size we will work with
+    image = image.resize((352, 528)) # Look into this: Should be fixing all our problems
+
     img = np.asarray(image)
 
     prediction_groups = pipeline.recognize([img])
@@ -72,48 +77,50 @@ def words_location(text, text_df):
             for word in list(text_df.text):
                 if similar(text_word,word) > .75:
                     bbox_text.append([x.round() for x in text_df[text_df.text == word].bbox][0])
-                    pass
-
+                    break
 
     return text_list, bbox_text
 
+
+# Put the words back on the image in the same place they were before
 def print_words(image, text_list, bbox_text, font_style):
 
     draw = ImageDraw.Draw(image)
 
+    # Making sure the colour is different from the background
+    # Select first bbox of first word
+    box = bbox_text[0]
+    cor_left = min(np.floor(box[0][0]), np.floor(box[2][0]))
+    cor_upper= min(np.floor(box[0][1]), np.floor(box[2][1]))
+    cor_right= max(np.floor(box[0][0]), np.floor(box[2][0]))
+    cor_lower= max(np.floor(box[0][1]), np.floor(box[2][1]))
+
+    # Crop where text should be, find most common colour and choose the opposite
+    crop_img = image.crop((cor_left, cor_upper, cor_right, cor_lower))
+    most_common = sorted(crop_img.getcolors(maxcolors=2**16), key=lambda t: t[0], reverse=True)[0]
+    fill=(255-most_common[1][0], 255-most_common[1][1], 255-most_common[1][2])
+
     for i, bbox in enumerate(bbox_text):
         a, b, = bbox[0]
-        #text = text_list[i]
-        text = text_list[0]
+        pdb.set_trace()
+        text = text_list[i]
         font = ImageFont.truetype(f"../raw_data/font_files/{font_style}.ttf", 1)
         font_len = 0
-        font_size = 1
+        font_size = 0
 
         # Making font bigger until text is the same size as before
-        while font_len < (bbox[1][0] - bbox[0][0]):
-            font = ImageFont.truetype(f"../raw_data/font_files/{font_style}.ttf", 1+font_size)
+        while font_len <= (bbox[1][0] - bbox[0][0]):
+            font = ImageFont.truetype(f"../raw_data/font_files/{font_style}.ttf", font_size+1)
             font_size = font_size + 1
             font_len = font.getlength(text)
+            # pdb.set_trace()
 
-        # Making sure the colour is different from the background
-        cor_left = min(bbox[0][0].round(), bbox[2][0].round())
-        cor_upper= min(bbox[0][1].round(), bbox[2][1].round())
-        cor_right = max(bbox[0][0].round(), bbox[2][0].round())
-        cor_lower= max(bbox[0][1].round(), bbox[2][1].round())
-
-        crop_img = image.crop((cor_left, cor_upper, cor_right, cor_lower))
-        most_common = sorted(crop_img.getcolors(maxcolors=2**16), key=lambda t: t[0], reverse=True)[0]
-        fill=(255-most_common[1][0], 255-most_common[1][1], 255-most_common[1][2])
-
+        font = ImageFont.truetype(f"../raw_data/font_files/{font_style}.ttf", font_size)
         draw.text((a, b), text=text, font=font , fill=fill)
 
     return image
 
 
-
-
-
-# TODO: Get Title and Actors from Fernandos Model
 def remove_text(image, title, actors, pipeline=pipeline):
 
     # Get df of text locations and image without text
@@ -129,15 +136,13 @@ def remove_text(image, title, actors, pipeline=pipeline):
     return image, title_words, title_location, actor_words, actor_location
 
 
-
-
 def add_text(image, title_words, title_location, actor_words, actor_location):
 
     # Choose font style #TODO: change to Drama, Comedy...
     font_style = ["LuckiestGuy", "Mistral", "Serpentine"]
 
     # Put text for Title and Actors on the image
-    print_words(image, title_words, title_location, font_style[0])
-    print_words(image, actor_words, actor_location, font_style[0])
+    img_w_title = print_words(image, title_words, title_location, font_style[0])
+    image_w_all = print_words(img_w_title, actor_words, actor_location, font_style[0])
 
-    return image
+    return image_w_all
