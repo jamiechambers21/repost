@@ -102,7 +102,6 @@ def print_words(image, text_list, bbox_text, font_style):
 
     for i, bbox in enumerate(bbox_text):
         a, b, = bbox[0]
-        pdb.set_trace()
         text = text_list[i]
         font = ImageFont.truetype(f"../raw_data/font_files/{font_style}.ttf", 1)
         font_len = 0
@@ -113,7 +112,6 @@ def print_words(image, text_list, bbox_text, font_style):
             font = ImageFont.truetype(f"../raw_data/font_files/{font_style}.ttf", font_size+1)
             font_size = font_size + 1
             font_len = font.getlength(text)
-            # pdb.set_trace()
 
         font = ImageFont.truetype(f"../raw_data/font_files/{font_style}.ttf", font_size)
         draw.text((a, b), text=text, font=font , fill=fill)
