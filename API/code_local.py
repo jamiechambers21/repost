@@ -23,11 +23,10 @@ processor = initialize_processor()
 model = load_model()
 prediction = run_prediction(image, model, processor)
 
-title = prediction['Title']
 actors = " ".join(prediction['Actors']) # ==> 'Robert De Niro Eden Barkin Ellen Barkin' <class 'str'>
 
 # REMOVE TEXT FROM IMAGE
-new_image, title_words, title_location, actor_words, actor_location = remove_text(image, title, actors) # prediction['Title'] = "This Boy's Life" <class 'str'>
+new_image, title_words, title_location, actor_words, actor_location = remove_text(image, prediction['Title'], actors) # prediction['Title'] = "This Boy's Life" <class 'str'>
 
 print('new_image', new_image) # ==> <class 'PIL.Image.Image'>
 print('title_words', title_words) # ==> ['this', "boy's", 'life'] <class 'list'>
@@ -35,24 +34,9 @@ print('title_location', title_location) # ==> <class 'list'>
 print('actor_words', actor_words) # ==> ['robert', 'de', 'niro', 'eden', 'barkin', 'ellen', 'barkin'] <class 'list'>
 print('actor_location', actor_location) # ==> <class 'list'>
 
-pdb.set_trace()
-
-#FAKE IT
-
-title_words = ['this', "boy's", 'life']
-actor_words = ['robert', 'de', 'niro', 'eden', 'barkin', 'ellen', 'barkin']
-
-test_dir = Path("../raw_data/img_received")
-test_img = 'test'
-test_path = test_dir.joinpath(f'{test_img}.jpg')
-new_image.save(test_path)
-
-new_image = Image.open(test_path).convert('RGB')
-
-pdb.set_trace()
-
-# # ADD TEXT BACK TO IMAGE
+# ADD TEXT BACK TO IMAGE
 new_image_ocr = add_text(new_image, title_words, title_location, actor_words, actor_location)
+# print_words(image, text_list, bbox_text, font_style)
 
 save_dir = Path("../raw_data/img_received")
 file_path = save_dir / 'test_new.jpg'
