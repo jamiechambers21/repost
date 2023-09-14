@@ -66,6 +66,7 @@ nvidia-nccl-cu11
 nvidia-nvtx-cu11
 overrides
 pandocfilters
+plotly
 pluggy
 prometheus-client
 pyarrow
