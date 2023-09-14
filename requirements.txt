@@ -16,6 +16,7 @@ click
 cmake
 datasets
 defusedxml
+diffusers
 dill
 fastjsonschema
 filelock
@@ -25,6 +26,7 @@ fsspec
 h11
 huggingface-hub
 iniconfig
+intel_extension_for_pytorch
 ipdb
 ipywidgets
 isoduration
