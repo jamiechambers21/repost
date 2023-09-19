@@ -107,7 +107,7 @@ def stable_diff(image, genre, decade, title):
 
     # Create a prompt using the gathered information
     prompt = f"Remove text, Create a {genre} scene that embodies the {decade} era. Make it {', '.join(buzz_words)} with {', '.join(visual_features)} elements. same numbers of people from original picture with clear facial features , character appearance: {', '.join(character_appearance)}. Capture spirit of {', '.join(decade_buzz_words)}. {title}"
-negative_prompt = "(((text))), (((title))), (words), (letters), ((Characters)), ((numbers)),((unclear face)), ((((ugly)))), (((duplicate))), ((morbid)), ((mutilated)), out of frame, (((poorly drawn face))), ((unclear face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))), (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), (((long neck))), ((fuzzy face)), (((hazy facial features)))"
+    negative_prompt = "(((text))), (((title))), (words), (letters), ((Characters)), ((numbers)),((unclear face)), ((((ugly)))), (((duplicate))), ((morbid)), ((mutilated)), out of frame, (((poorly drawn face))), ((unclear face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))), (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), (((long neck))), ((fuzzy face)), (((hazy facial features)))"
     # LOAD PIPELINE
     device = "cuda"
     model_path = "CompVis/stable-diffusion-v1-4"
