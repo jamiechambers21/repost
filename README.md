@@ -27,6 +27,8 @@ Simply load an image from your drive or by url and run the notebook to see the r
 
 5. Final Image Processing (Reintroduce the text)
 
+![Captura de pantalla 2023-09-20 091523](https://github.com/jamiechambers21/repost/assets/59603715/63b4582b-476b-46cd-bd8a-34a47b5f0edb)
+
 ## Donut
 Document understanding transformer
 - Identify text in images
