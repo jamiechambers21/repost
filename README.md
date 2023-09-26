@@ -7,13 +7,13 @@ The code is tested on Ubuntu with Nvidia GPUs and CUDA installed. Python>=3.6 is
 
 ## Installation
 The following packages are required
-
+```
 ! pip install keras_ocr
 ! nvidia-smi
 ! pip install diffusers==0.8.0 transformers ftfy accelerate # Had to change form 0.3.0 -> 0.8.0
 ! pip install -qq "ipywidgets>=7,<8"
 ! pip install transformers
-
+```
 ## 🚀 How to use?
 Simply load an image from your drive or by url and run the notebook to see the results
 
